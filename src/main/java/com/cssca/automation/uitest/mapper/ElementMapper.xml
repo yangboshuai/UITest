@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.cssca.automation.uitest.dao.ElementDao">
+
+	<!-- select语句 -->
+	<select id="selectElementByID" parameterType="int" resultType="Element">
+		select * from element where id = #{id}
+	</select>
+
+	<select id="getElementByName" parameterType="string"
+		resultType="Element">
+		select * from element where name = #{name}
+	</select>
+
+	<!--执行增加操作的SQL语句。id和parameterType分别与IUserOperation接口中的addUser方法的名字和参数类型一致。 
+		useGeneratedKeys设置为"true"表明要MyBatis获取由数据库自动生成的主键；keyProperty="id"指定把获取到的主键值注入到User的id属性 -->
+	<insert id="insertElement" parameterType="Element" useGeneratedKeys="true"
+		keyProperty="id">
+		insert into element(name,type,typeValue,description,userId)
+		values(#{name},#{type},#{typeValue},#{description},#{userId})
+	</insert>
+
+	<update id="updateElement" parameterType="Element">
+		update element set
+		name=#{name},type=#{type},typeValue=#{typeValue},description=#{description},userId=#{userId}
+		where id=#{id}
+	</update>
+
+	<delete id="deleteElement" parameterType="int">
+		delete from element 
+		where id=#{id}
+	</delete>
+
+	<select id="getAllElements" resultType="Element">
+		select * from element
+	</select>
+	
+	<select id="getMyElements" resultType="Element" parameterType="int">
+		select * from element
+		where userId=#{userId}
+	</select>
+	
+	<select id="getOthersElements" resultType="Element" parameterType="int">
+		select * from element
+		where userId!=#{userId}
+	</select>
+</mapper>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN"  
+"http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+	<!-- 别名 -->
+
+	<typeAliases>
+		<typeAlias type="com.cssca.automation.uitest.entity.Element"
+			alias="Element" />
+		<typeAlias type="com.cssca.automation.uitest.entity.Keyword"
+			alias="Keyword" />
+		<typeAlias type="com.cssca.automation.uitest.entity.Step"
+			alias="Step" />
+		<typeAlias type="com.cssca.automation.uitest.entity.Case"
+			alias="Case" />
+		<typeAlias type="com.cssca.automation.uitest.entity.Project"
+			alias="Project" />
+		<typeAlias type="com.cssca.automation.uitest.entity.Result"
+			alias="Result" />
+		<typeAlias type="com.cssca.automation.uitest.entity.User"
+			alias="User" />
+	</typeAliases>
+
+</configuration>

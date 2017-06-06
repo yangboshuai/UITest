@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.cssca.automation.uitest.dao.CaseDao">
+
+
+	<!--执行增加操作的SQL语句。id和parameterType分别与IUserOperation接口中的addUser方法的名字和参数类型一致。 
+		useGeneratedKeys设置为"true"表明要MyBatis获取由数据库自动生成的主键；keyProperty="id"指定把获取到的主键值注入到User的id属性 -->
+	<insert id="addCase" parameterType="Case" useGeneratedKeys="true"
+		keyProperty="id">
+		INSERT INTO testCase (NAME, stepCount, userId)
+		VALUES
+			(
+				#{name},
+				#{stepCount},
+				#{userId}
+			)
+	</insert>
+
+	<update id="updateCase" parameterType="Case">
+		update testCase set
+		id=#{id},name=#{name},stepCount=#{stepCount},userId=#{userId}
+		where id=#{id}
+	</update>
+
+	<delete id="deleteCase" parameterType="int">
+		delete from testCase
+		where id=#{id}
+	</delete>
+	
+	<select id="getCaseByID" parameterType="int" resultType="Case">
+		select * from testCase
+		where id=#{id}
+		
+	</select>
+	
+	<select id="getAllCases" resultType="Case">
+		SELECT
+			testCase. ID,
+			testCase. NAME,
+			testCase.stepCount,
+			testCase.userId
+		FROM
+			testCase
+	</select>
+	
+	<select id="getCaseByUser" resultType="Case" parameterType="int">
+		SELECT
+			testCase. ID,
+			testCase. NAME,
+			testCase.stepCount,
+			testCase.userId
+		FROM
+			testCase
+		WHERE
+			testCase.userId = #{userId}
+	</select>	
+
+	<update id="updateCaseStepNo" parameterType="int">
+		update testCase set
+		stepCount=#{stepCount}
+		where id=#{caseNo}
+	</update>
+	
+	<select id="getCaseStepCount" parameterType="int" resultType="int">
+		SELECT count(*)
+		FROM
+			step
+		WHERE
+			caseNo = #{caseNo}
+	</select>
+	
+</mapper>
