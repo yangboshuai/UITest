@@ -1,5 +1,7 @@
 package com.cssca.automation.uitest.service;
 
+import java.net.MalformedURLException;
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -13,5 +15,6 @@ public interface IFindElementService {
 	WebElement watiForElement(final By by);
 	By getBy(String type, String value);
 	WebDriver createWebDriver(Browser browser);
+	WebDriver createRemoteWebDriver(Browser browser) throws MalformedURLException;
 
 }

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.cssca.automation.uitest.dao.ProjectDao">
+
+
+	<!--执行增加操作的SQL语句。id和parameterType分别与IUserOperation接口中的addUser方法的名字和参数类型一致。 
+		useGeneratedKeys设置为"true"表明要MyBatis获取由数据库自动生成的主键；keyProperty="id"指定把获取到的主键值注入到User的id属性 -->
+	<insert id="addProject" parameterType="Project" useGeneratedKeys="true"
+		keyProperty="id">
+		insert into project(name)
+		values(#{name})
+	</insert>
+
+	<update id="updateProject" parameterType="Project">
+		update project set
+		name=#{name}
+		where id=#{id}
+	</update>
+
+	<delete id="deleteProject" parameterType="int">
+		delete from project
+		where id=#{id}
+	</delete>
+	
+	<select id="getAllProjects" resultType="Project">
+		select * from Project
+	</select>
+	
+	<select id="getProject" parameterType="int" resultType="Project">
+		select * from Project
+		where id=#{id}
+	</select>
+      
+</mapper>

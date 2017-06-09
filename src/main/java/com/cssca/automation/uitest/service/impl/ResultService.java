@@ -19,16 +19,7 @@ public class ResultService implements IResultService {
 	
 	@Autowired
 	private ResultDao resultDao ;
-	
-	public static GoEasy goeasy=new GoEasy("BC-04870854b9bd442d840a65ce574b7c44");
-	
-	@Override
-	public void publishMessage(String message) {
-		// TODO Auto-generated method stub
-		goeasy.publish("logMessage", dateService.getDate()+" "+message);
-	}
 
-	@Override
 	public boolean addResult(Result result) {
 		// TODO Auto-generated method stub
 		return resultDao.addResult(result);

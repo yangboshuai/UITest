@@ -3,10 +3,10 @@ package com.cssca.automation.uitest.service.impl;
 import java.util.HashMap;
 import java.util.List;
 
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.JavascriptExecutor;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -86,20 +86,20 @@ public class StepService implements IStepService {
 	}
 
 	@Override
-	public boolean performStep(Step step,Result result) {
+	public boolean performStep(Step step,Result result,WebDriver driver) {
 		// TODO Auto-generated method stub
 
-		resultService.publishMessage("perform step:" + step.getKeyword()
-				+ ",with parameter:" + step.getParameter());
+		result.pushLog("perform step:" + step.toString());
 		
 		Keyword kw=null;
 		try{
 			kw = keywordService.getKeywordByName(step.getKeyword());
 			logger.info("find keyword:"+kw.toString());
+			result.pushLog("find keyword:"+kw.toString());
 		}catch(Exception e){
 
 			logger.info("cann't find keyword:"+kw.toString());
-			resultService.publishMessage("cann't find keyword:"+kw.toString());
+			result.pushLog("cann't find keyword:"+kw.toString());
 			return false;
 		}
 		
@@ -108,13 +108,12 @@ public class StepService implements IStepService {
 		 */
 		switch (kw.getName()) {
 		case "open":
-			String parameter=step.getParameter();
-			MyDriver.driver.get(step.getParameter());
+			driver.get(step.getParameter());
 			return true;
 		case "wait":
 			try {
 				Thread.sleep(Integer.valueOf(step.getParameter())*1000);
-				resultService.publishMessage("wait:"+step.getParameter()+"s");
+				result.pushLog("wait:"+step.getParameter()+"s");
 				logger.info("wait:"+step.getParameter()+"s");
 			} catch (NumberFormatException e) {
 				// TODO Auto-generated catch block
@@ -125,13 +124,13 @@ public class StepService implements IStepService {
 			}
 			return true;
 		case "switchToFrame":
-			MyDriver.driver.switchTo().frame(step.getParameter());
+			driver.switchTo().frame(step.getParameter());
 			return true;
 		case "maximize":
-			MyDriver.driver.manage().window().maximize();
+			driver.manage().window().maximize();
 			return true;
 		case "executeJavaScript":
-			JavascriptExecutor js=(JavascriptExecutor)MyDriver.driver;
+			JavascriptExecutor js=(JavascriptExecutor)driver;
 			js.executeScript(step.getParameter());
 			return true;
 		}
@@ -143,7 +142,7 @@ public class StepService implements IStepService {
 		WebElement webElement;
 		try{
 			webElement = findElementService.getWebElement(element);
-			resultService.publishMessage("find element:"+element.toString());
+			result.pushLog("find element:"+element.toString());
 			logger.info("find element:"+element.toString());
 			
 		}catch(Exception e){
@@ -151,9 +150,8 @@ public class StepService implements IStepService {
 			HashMap<String,String> stepMap = new HashMap<String,String>();
 			stepMap.put(step.getStepNo().toString(), "cannot find element:"+element.toString());
 			result.errorCases.put(step.getCaseNo().toString(), stepMap);	
-			logger.info(result.errorCases.toString());
-			
-			resultService.publishMessage("cannot find element:"+element.toString());
+		
+			result.pushLog("cannot find element:"+element.toString());
 			logger.info("cannot find element:"+element.toString());
 			
 			throw e;
@@ -166,7 +164,7 @@ public class StepService implements IStepService {
 			switch (action) {
 			case "sendkeys":
 				webElement.sendKeys(step.getParameter());
-				resultService.publishMessage("sendkeys:"+step.getParameter());
+				result.pushLog("sendkeys:"+step.getParameter());
 				break;
 			case "click":
 				webElement.click();
@@ -180,12 +178,12 @@ public class StepService implements IStepService {
 		}catch(Exception e){
 			
 			HashMap<String,String> stepMap = new HashMap<String,String>();
-			stepMap.put(step.getStepNo().toString(), "cannot find element:"+element.toString());
+			stepMap.put(step.getStepNo().toString(), "cannot complete the keyword:"+kw.toString());
 			result.errorCases.put(step.getCaseNo().toString(), stepMap);	
 
 			logger.info(result.errorCases.toString());
 			
-			resultService.publishMessage("cannot complete the keyword:"+kw.toString());
+			result.pushLog("cannot complete the keyword:"+kw.toString());
 			logger.info("cannot complete the keyword:"+kw.toString());
 			
 			throw e;

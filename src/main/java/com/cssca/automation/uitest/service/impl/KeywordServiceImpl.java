@@ -37,7 +37,6 @@ public class KeywordServiceImpl implements IKeywordService {
 			Keyword keyword=keywordDao.getKeywordByName(name);
 			return keyword;
 		}catch(Exception e){
-			resultService.publishMessage("Cann't find keyword:"+name);
 			throw e;
 		}
 	}

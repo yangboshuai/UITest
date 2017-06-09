@@ -15,7 +15,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 
 <script type="text/javascript" src="js/jquery.js"></script>
-<script type="text/javascript" src="http://cdn.goeasy.io/goeasy.js"></script>
+
 
 <title>测试结果</title>
 
@@ -51,9 +51,14 @@
 	//===================================弹框js部分 end by:songfayuan=========================================  
 		
 	function runCase(){
+		
     	var caseList=<%=request.getAttribute("caseList")%>;
-        $.ajax({type:"post",
-        	url:"<%=basePath%>startCases",
+        var logTest="";
+        var timestamp=new Date().getTime();
+        
+        $.ajax({
+        	type:"post",
+        	url:"<%=basePath%>startCases?rand="+timestamp,
         	data:{"cases":caseList},
         	success:function(data){
         					document.getElementById("startTime").value=data.startTime;
@@ -75,22 +80,33 @@
            	    			ShowDiv();
         	    		 }
         });
+        
+        var timer=window.setInterval(function(){
+
+                    $.ajax({
+                    	type:"get",
+                    	url:"<%=basePath%>getLog?rand="+timestamp,
+                    	success:function(data){
+                    		if(data.log!=''){
+	                    		logTest=logTest+data.log+"\n"; 
+	                    		document.getElementById("log").value=logTest;
+                    		}
+                    		if(eval(data.isFinished)){
+                    			clearInterval(timer);
+                    		}
+                    	}
+                    });
+
+        },100);
+
+
     };
-            window.onload = runCase();
-            var logTest="";
+    
+    window.onload = runCase();
+           
     </script>
 
-	<script type="text/javascript">
-       var goEasy = new GoEasy({appkey:'BC-04870854b9bd442d840a65ce574b7c44'});
 
-	   goEasy.subscribe({
-	           channel: 'logMessage',
-	           onMessage: function(message){
-	        	   logTest=logTest+message.content+"\n";
-	               document.getElementById("log").value=logTest;
-	         }
-       });
- 	</script>
 
 	<textarea id="log" name="log" rows="30" cols="160"></textarea>
 

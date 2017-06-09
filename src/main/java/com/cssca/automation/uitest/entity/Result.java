@@ -1,10 +1,10 @@
 package com.cssca.automation.uitest.entity;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 
-import net.sf.json.JSONObject;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.LinkedList;
 
 public class Result {
 	
@@ -14,7 +14,10 @@ public class Result {
 	private Integer failedCount=0;
 	private String errorCasesStr;
 	public HashMap<String,HashMap<String,String>> errorCases;
+	public LinkedList<String> log =new LinkedList<String>();
+	public Boolean isFinished=false;
 	
+	SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 	
 	public Result(){
 		startTime="";
@@ -63,8 +66,29 @@ public class Result {
 	public void setErrorCasesStr(String errorCasesStr){
 		this.errorCasesStr=errorCasesStr;
 	}
-	
+	public void pushLog(String message){
 
+		message=df.format(new Date())+" "+message;
+		log.addFirst(message);
+	}
+	
+	public  String getLog(){
+		
+		String logMsg="";
+		
+		try{
+			logMsg=log.removeLast();
+		}catch(Exception e){
+			
+		}
+		
+		return logMsg;
+	}
+	
+	public void clearLog(){
+		log.clear();
+	}
+	
 	
 	@Override  
     public String toString() {  

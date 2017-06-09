@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.cssca.automation.uitest.dao.StepDao">
+
+
+	<!--执行增加操作的SQL语句。id和parameterType分别与IUserOperation接口中的addUser方法的名字和参数类型一致。 
+		useGeneratedKeys设置为"true"表明要MyBatis获取由数据库自动生成的主键；keyProperty="id"指定把获取到的主键值注入到User的id属性 -->
+	<insert id="addStep" parameterType="Step" useGeneratedKeys="true"
+		keyProperty="id">
+		insert into step(stepNo,keyword,parameter,caseNo)
+		values(#{stepNo},#{keyword},#{parameter},#{caseNo})
+	</insert>
+
+	<update id="updateStep" parameterType="Step">
+		update step set
+		stepNo=#{stepNo},keyword=#{keyword},parameter=#{parameter},caseNo=#{caseNo}
+		where id=#{id}
+	</update>
+
+	<delete id="deleteStep" parameterType="int">
+		delete from step
+		where id=#{id}
+	</delete>
+
+	<select id="getStepByID" parameterType="int" resultType="Step">
+		select * from step
+		where
+		id=#{id}
+	</select>
+
+	<resultMap id="StepListMap" type="Step">
+
+		<result column="id" jdbcType="INTEGER" property="id" />
+
+		<result column="stepNo" jdbcType="INTEGER" property="stepNo" />
+		
+		<result column="keyword" jdbcType="VARCHAR" property="keyword" />
+				
+	   	<result column="parameter" jdbcType="VARCHAR" property="parameter" />
+	   	
+	   	<result column="caseNo" jdbcType="INTEGER" property="caseNo" />
+
+	</resultMap>
+
+	<select id="getStepByCaseNo" parameterType="int" resultMap="StepListMap">
+		select * from step
+		where caseNo=#{caseNo}
+		order by stepNo asc;
+	</select>
+
+	<delete id="deleteStepByCaseNo" parameterType="int">
+		delete from step
+		where caseNo=#{caseNo}
+	</delete>
+	
+	<parameterMap type="map" id="exchangeStepMap">  
+   		<parameter property="stepIdone" jdbcType="INTEGER" mode="IN"/>  
+   		<parameter property="stepIdtwo" jdbcType="INTEGER" mode="IN"/>  
+ 	</parameterMap>
+ 	
+	<update id="exchangeStep" parameterMap="exchangeStepMap" statementType="CALLABLE" >  
+       {call exchangeStep(?,?)}  
+    </update>
+      
+</mapper>

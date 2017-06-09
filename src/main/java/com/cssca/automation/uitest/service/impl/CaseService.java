@@ -1,5 +1,6 @@
 package com.cssca.automation.uitest.service.impl;
 
+import java.net.MalformedURLException;
 import java.util.List;
 
 import org.openqa.selenium.WebDriver;
@@ -89,41 +90,42 @@ public class CaseService implements ICaseService {
 		return caseDao.getCaseByUser(userId);
 	}
 	
-	@SuppressWarnings("static-access")
 	@Override
-	public boolean runCase(Integer id,Result result) {
+	public boolean runCase(Integer id,Result result) throws MalformedURLException {
 		// TODO Auto-generated method stub
 
 		Case testCase=caseDao.getCaseByID(id);
-		resultService.publishMessage("run case:"+testCase.getName());
+		result.pushLog("run case:"+testCase.getName());
 		
 
 		List<Step> steps=stepDao.getStepByCaseNo(id);
 		
-		MyDriver.driver=findElementService.createWebDriver(Browser.CHROME);
-		
+		WebDriver driver=findElementService.createRemoteWebDriver(Browser.CHROME);;
+//		MyDriver.driver=findElementService.createWebDriver(Browser.CHROME);
+
 		for (Step s : steps){
 			try{
-				stepService.performStep(s,result);
+				stepService.performStep(s,result,driver);
 			}catch(Exception e){
 				
-				e.printStackTrace();			
-				MyDriver.driver.close();
+				e.printStackTrace();
+				driver.close();
+				//MyDriver.driver.close();
 				result.setFailedCount(result.getFailedCount()+1);
-				resultService.publishMessage("error message:"+e.getMessage());
+				result.pushLog("error message:"+e.getMessage());
 				
 				return false;
 			}
 
 		}
-		MyDriver.driver.close();
-		
 
-		
-		resultService.publishMessage("finished!");
+		driver.close();
+			
+		result.pushLog("finished!");
 		logger.info("finished!");
 		
 		logger.info(result.toString());
+		
 		return true;
 	}
 

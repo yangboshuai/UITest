@@ -2,6 +2,8 @@ package com.cssca.automation.uitest.service;
 
 import java.util.List;
 
+import org.openqa.selenium.WebDriver;
+
 import com.cssca.automation.uitest.entity.Result;
 import com.cssca.automation.uitest.entity.Step;
 
@@ -13,7 +15,7 @@ public interface IStepService {
 	Step getStepByID(Integer id);
 	List<Step> getStepByCaseNo(Integer caseNo);
 	boolean deleteStepByCaseNo(Integer caseNo);
-	boolean performStep(Step step,Result result);
+	boolean performStep(Step step,Result result,WebDriver driver);
 	boolean exchangeStep(Integer stepId1,Integer stepId2);
 	boolean checkStep(Step step);
 }
