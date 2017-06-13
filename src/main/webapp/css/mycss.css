@@ -48,4 +48,17 @@
     /* overflow: auto; */  
 }  
 
+.node {  
+    display: none;  
+    position: absolute;  
+    top: 10%;
+    left: 20%;  
+    width: 60%;  
+    height:80%;
+    border: 1px solid #d3d3d3;  
+    background-color: white;
+    z-index: 1002;  
+    /* overflow: auto; */  
+}  
+
 /* ===================================µ¯¿òcss²¿·Ö end by:songfayuan========================================= */  

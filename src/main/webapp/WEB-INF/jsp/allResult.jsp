@@ -10,6 +10,8 @@
 <html>
 <head>
 
+<base href="<%=basePath%>">  
+
 <link rel="stylesheet" type="text/css" href="css/mycss.css" >
 
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
@@ -25,9 +27,6 @@
 	font-style: italic;
 }
 </style>
-
-</head>
-<body>
 
 	<script type="text/javascript">
 	
@@ -53,13 +52,14 @@
 	function runCase(){
 		
     	var caseList=<%=request.getAttribute("caseList")%>;
+    	var nodeId=<%=request.getAttribute("nodeId")%>;
         var logTest="";
         var timestamp=new Date().getTime();
         
         $.ajax({
         	type:"post",
         	url:"<%=basePath%>startCases?rand="+timestamp,
-        	data:{"cases":caseList},
+        	data:{"cases":caseList,"nodeId":nodeId},
         	success:function(data){
         					document.getElementById("startTime").value=data.startTime;
         					document.getElementById("totalCount").value=data.totalCount;
@@ -105,6 +105,10 @@
     window.onload = runCase();
            
     </script>
+
+</head>
+<body>
+
 
 
 

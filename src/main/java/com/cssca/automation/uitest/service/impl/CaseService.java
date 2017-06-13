@@ -12,14 +12,14 @@ import org.springframework.stereotype.Service;
 import com.cssca.automation.uitest.dao.CaseDao;
 import com.cssca.automation.uitest.dao.StepDao;
 import com.cssca.automation.uitest.entity.Case;
-import com.cssca.automation.uitest.entity.MyDriver;
 import com.cssca.automation.uitest.entity.Result;
+import com.cssca.automation.uitest.entity.RunSetting;
 import com.cssca.automation.uitest.entity.Step;
-import com.cssca.automation.uitest.entity.Browser;
 import com.cssca.automation.uitest.service.ICaseService;
 import com.cssca.automation.uitest.service.IDateService;
 import com.cssca.automation.uitest.service.IFindElementService;
 import com.cssca.automation.uitest.service.IResultService;
+import com.cssca.automation.uitest.service.IRunSettingService;
 import com.cssca.automation.uitest.service.IStepService;
 
 @Service
@@ -45,6 +45,9 @@ public class CaseService implements ICaseService {
 	
 	@Autowired
 	private IDateService dateService;
+	
+	@Autowired
+	private IRunSettingService runSettingService;
 	
 	@Override
 	public boolean addCase(Case testcase) {
@@ -91,17 +94,15 @@ public class CaseService implements ICaseService {
 	}
 	
 	@Override
-	public boolean runCase(Integer id,Result result) throws MalformedURLException {
+	public boolean runCase(Integer id,Result result,RunSetting runParms) throws MalformedURLException {
 		// TODO Auto-generated method stub
 
 		Case testCase=caseDao.getCaseByID(id);
 		result.pushLog("run case:"+testCase.getName());
 		
+		WebDriver driver=runSettingService.createRemoteWebDriver(runParms.host,runParms.port,runParms.browser,runParms.path);
 
 		List<Step> steps=stepDao.getStepByCaseNo(id);
-		
-		WebDriver driver=findElementService.createRemoteWebDriver(Browser.CHROME);;
-//		MyDriver.driver=findElementService.createWebDriver(Browser.CHROME);
 
 		for (Step s : steps){
 			try{
@@ -109,7 +110,7 @@ public class CaseService implements ICaseService {
 			}catch(Exception e){
 				
 				e.printStackTrace();
-				driver.close();
+				driver.quit();
 				//MyDriver.driver.close();
 				result.setFailedCount(result.getFailedCount()+1);
 				result.pushLog("error message:"+e.getMessage());
@@ -119,7 +120,7 @@ public class CaseService implements ICaseService {
 
 		}
 
-		driver.close();
+		driver.quit();
 			
 		result.pushLog("finished!");
 		logger.info("finished!");

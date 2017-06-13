@@ -16,7 +16,6 @@ import com.cssca.automation.uitest.dao.CaseDao;
 import com.cssca.automation.uitest.dao.StepDao;
 import com.cssca.automation.uitest.entity.Element;
 import com.cssca.automation.uitest.entity.Keyword;
-import com.cssca.automation.uitest.entity.MyDriver;
 import com.cssca.automation.uitest.entity.Result;
 import com.cssca.automation.uitest.entity.Step;
 import com.cssca.automation.uitest.service.IElementService;
@@ -141,7 +140,7 @@ public class StepService implements IStepService {
 
 		WebElement webElement;
 		try{
-			webElement = findElementService.getWebElement(element);
+			webElement = findElementService.getWebElement(driver,element);
 			result.pushLog("find element:"+element.toString());
 			logger.info("find element:"+element.toString());
 			

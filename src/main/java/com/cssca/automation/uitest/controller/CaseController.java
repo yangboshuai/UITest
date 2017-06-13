@@ -13,9 +13,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.cssca.automation.uitest.entity.Case;
+import com.cssca.automation.uitest.entity.RunSetting;
 import com.cssca.automation.uitest.entity.Step;
 import com.cssca.automation.uitest.entity.User;
 import com.cssca.automation.uitest.service.ICaseService;
+import com.cssca.automation.uitest.service.IRunSettingService;
 
 
 @Controller
@@ -24,6 +26,9 @@ public class CaseController {
 	
 	@Autowired
 	private ICaseService caseService;
+	
+	@Autowired
+	private IRunSettingService runSettingService;
 	
 	@RequestMapping("/getCase")
 	public String getCase(int id,HttpServletRequest request) {
@@ -82,8 +87,11 @@ public class CaseController {
 		User user=(User)session.getAttribute("user");
 		
 		List<Case> cases= caseService.getCaseByUser(user.getId());
+		List<RunSetting> runSettings=runSettingService.getRunSettings(user.getId());
 		
 		request.setAttribute("caseList", cases);
+		request.setAttribute("nodeList", runSettings);
+		
 		return "case/allCase";
 	}	
 

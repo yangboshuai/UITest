@@ -43,6 +43,8 @@ $(function(){
 	<br>
 	<a href="<%=basePath%>testCase/getCasesByUser">测试用例管理</a>
 	<br>
+	<a href="<%=basePath%>node/getAllNodes">节点管理</a>
+	<br>
 	<a href="<%=basePath%>logout">退出</a>
 	
 	</div>

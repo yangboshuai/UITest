@@ -19,6 +19,8 @@
 			alias="Result" />
 		<typeAlias type="com.cssca.automation.uitest.entity.User"
 			alias="User" />
+		<typeAlias type="com.cssca.automation.uitest.entity.RunSetting"
+			alias="RunSetting" />
 	</typeAliases>
 
 </configuration>
